@@ -1,39 +1,38 @@
 #include<bits/stdc++.h>
 using namespace std;
 using ll = long long;
-ll n, m;
-vector<int> v;
+ll n, m,k;
+vector<ll> v;
+ll MN = 0;
+ll MX = 1e9;
 
-ll c(ll u) {
+bool f(int h) {
     ll s = 0;
     for (ll e : v)
-        if (u < e)
-            s += e - u;
-    return s;
+        if (h < e)
+            s += e - h;
+    if (s >= m)
+        return true;
+    else
+        return false;
+}
+
+int parametric_search() {
+    int l = MN; int r = MX-1;
+    while (l != r) {
+        int m = r - (r - l) / 2;
+        f(m) ? l = m : r = m - 1;
+    }
+    return l;
 }
 
 int main() {
+    cin.tie(0);
     cin >> n >> m;
-    int a;
     for (int i = 0; i < n; i++) {
-        cin >> a;
-        v.push_back(a);
+        cin >> k;
+        v.emplace_back(k);
     }
-    sort(v.begin(), v.end());
-    ll l = 0, r = v.back();
-
-    while (l <= r) {
-        ll md = (l + r) / 2;
-        ll g = c(md);
-        if (g == m) {
-            cout << md;
-            break;
-        }
-        else if (g > m)
-            l = md + 1;
-        else
-            r = md - 1;
-    }
-
+    cout<<parametric_search();
     return 0;
 }
